@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     // 0 -> nothing, 1 -> Addition, 2 -> Subtraction, 3 -> Multiplication, 4 -> Division
@@ -23,18 +24,31 @@ class MainActivity : AppCompatActivity() {
         val btnEquals: Button = findViewById(R.id.btnEquals)
 
         btnEquals.setOnClickListener {
-            var number2: Double = tv_num2.text.toString().toDouble()
-            var res: Double = 0.0
+            if (tv_num2.text.isEmpty()) {
+                Toast.makeText(this, "Please enter numbers", Toast.LENGTH_SHORT).show()
+            } else {
+                var number2: Double = tv_num2.text.toString().toDouble()
 
-            when(op) {
-                1 -> res = number1 + number2
-                2 -> res = number1 - number2
-                3 -> res = number1 * number2
-                4 -> res = number1 / number2
+                if (op == 4 && number2 == 0.0) {
+                    Toast.makeText(this, "Cannot divide by zero", Toast.LENGTH_SHORT).show()
+                }
+                else if (op == 0) {
+                    Toast.makeText(this, "Please select an operator", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    var res: Double = 0.0
+
+                    when(op) {
+                        1 -> res = number1 + number2
+                        2 -> res = number1 - number2
+                        3 -> res = number1 * number2
+                        4 -> res = number1 / number2
+                    }
+
+                    tv_num2.setText(res.toString())
+                    tv_num1.setText("")
+                }
             }
-
-            tv_num2.setText(res.toString())
-            tv_num1.setText("")
         }
 
         btnC.setOnClickListener {
@@ -59,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             R.id.btn7 -> tv_num2.setText(num2 + "7")
             R.id.btn8 -> tv_num2.setText(num2 + "8")
             R.id.btn9 -> tv_num2.setText(num2 + "9")
-            R.id.btnDecimal -> tv_num2.setText(num2 + ".")
+            R.id.btnDecimal -> if (!num2.contains('.')) tv_num2.setText(num2 + ".")
         }
     }
 
